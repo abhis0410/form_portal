@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view_forms.css') }}">
+    <title>Available Forms</title>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Available Forms</h1>
+        <ul>
+            {% for form in forms %}
+                <li>
+                    <div class="form-entry">
+                        <a href="{{ url_for('fill_form', form_id=form.id) }}">{{ form.form_name }}</a> - {{ form.form_desc }}
+                        
+                        <form method="POST" action="{{ url_for('delete_form', form_id=form.id) }}">
+                            <button class="delete-button" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

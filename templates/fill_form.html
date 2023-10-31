@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fill_form.css') }}">
+    <title>Fill the Form</title>
+</head>
+<body>
+    <div class="form-container">
+        <h1>{{ form.form_name }}</h1>
+        <p>{{ form.description }}</p>
+
+        <form method="POST">
+            {% for question in questions %}
+                <div class="question">
+                    <label for="response_{{ loop.index0 }}">Question: {{ question.question_text }}</label>
+                    
+                    {% if question.question_type == "text" %}
+                        <input type="text" name="response_{{ loop.index }}" required>
+                    {% elif question.question_type == "number" %}
+                        <input type="number" name="response_{{ loop.index }}" required>
+                    {% elif question.question_type == "multiple-choice" %}
+                        <select name="response_{{ loop.index }}" required>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

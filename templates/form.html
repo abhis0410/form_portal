@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+    <title>Generate a New Form</title>
+    <script>
+        function addQuestion() {
+            var questionContainer = document.getElementById("question-container");
+            var newQuestion = document.createElement("div");
+            var questionIndex = questionContainer.children.length - 2;
+
+            newQuestion.innerHTML = `
+                <label for="question">Question:${questionIndex}</label>
+                <input type="text" name="question[]" required>
+                <label for="answer-type">Answer Type</label>
+                <select name="answer-type[]" required>
+                    <option value="text">Text</option>
+                    <option value="number">Number</option>
+                    <option value="multiple-choice">Multiple Choice</option>
+                    <!-- Add more options as needed -->
+                </select>
+            `;
+
+            questionContainer.appendChild(newQuestion);
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Generate a New Form</h1>
+        <form method="POST">
+            <label for="title">Form Title</label>
+            <input type="text" name="title" id="title" required>
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description">
+            
+            <div id="question-container">
+                <label for="question">Question 1</label>
+                <input type="text" name="question[]" required>
+                <label for="answer-type">Answer Type</label>
+                <select name="answer-type[]" required>
+                    <option value="text">Text</option>
+                    <option value="number">Number</option>
+                    <option value="multiple-choice">Multiple Choice</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+
+            <button type="button" onclick="addQuestion()">Add Question</button>
+            <button type="submit">Create Form</button>
+        </form>
+    </div>
+</body>
+</html>

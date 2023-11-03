@@ -14,6 +14,8 @@
                 <li>
                     <div class="form-entry">
                         <a href="{{ url_for('fill_form', form_id=form.id) }}">{{ form.form_name }}</a> - {{ form.form_desc }}
+
+                        <a href="{{ url_for('view_responses', form_id=form.id) }}" class="btn btn-primary">View Responses</a>
                         
                         <form method="POST" action="{{ url_for('delete_form', form_id=form.id) }}">
                             <button class="delete-button" type="submit">Delete</button>

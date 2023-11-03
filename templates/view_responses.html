@@ -1,0 +1,39 @@
+<!-- view_responses.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view_responses.css') }}">
+    <title>Responses</title>
+</head>
+<body>
+
+<h1>Responses for {{ form.form_name }}</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Submission Date</th>
+            <th>Questions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for response in responses %}
+            <tr>
+                <td>{{ response.submission_date }}</td>
+                <td>
+                    <ul>
+                        {% for question in questions %}
+                            <li>{{ question.question_text }}: {{ get_response_text(response, question) }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

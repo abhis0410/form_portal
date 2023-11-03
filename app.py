@@ -6,10 +6,12 @@
 #Code Starts Here
 
 
-#Importing Libs
+#Importing Libraries
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
+from plugin_loader import load_plugins
+from models import Form, Question, Response, Answer
 
 # Initializing App
 
@@ -18,35 +20,21 @@ app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forms.db'  # Use SQLite for simplicity. Replace with a real database in production.
 db = SQLAlchemy(app)
 
-#Declaring Forms Section
-class Form(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    form_name = db.Column(db.String(100))
-    form_desc = db.Column(db.String(5000))
-    creation_date = db.Column(db.DateTime)
-
-class Question(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    form_id = db.Column(db.Integer, db.ForeignKey('form.id'))
-    question_text = db.Column(db.String(255))
-    question_type = db.Column(db.String(50))
-
-class Response(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    form_id = db.Column(db.Integer, db.ForeignKey('form.id'))
-    submission_date = db.Column(db.DateTime)
-
-class Answer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    response_id = db.Column(db.Integer, db.ForeignKey('response.id'))
-    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
-    answer_text = db.Column(db.String(255))
-    selected_option = db.Column(db.String(50))
-    answer_date = db.Column(db.DateTime)
-
+# Loading Plugins
+loaded_plugins = load_plugins()
 
 #Functions Start here
 
+def after_submission_plugins(form, response):
+
+    result1 = loaded_plugins['google_sheets'].export_response(form, response)
+    print(result1)
+
+    result2 = loaded_plugins['sms_notification'].send_sms_notification(form, response)
+    print(result2)
+
+
+    
 def is_logged_in():
     return 'username' in session
 
@@ -117,7 +105,6 @@ def generate_form():
     return render_template('form.html')
 
 
-
 #-------------------View Form-----------------------------
 
 @app.route('/view_forms')
@@ -130,9 +117,33 @@ def view_forms():
     return render_template('view_forms.html', forms=forms)
 
 
+#-------------------View Responses-----------------------------
+
+def get_response_text(response, question):
+    answer = Answer.query.filter_by(response_id=response.id, question_id=question.id).first()
+    if answer:
+        return answer.answer_text
+    else:
+        return "No answer"
+
+
+@app.route('/view_responses/<int:form_id>')
+def view_responses(form_id):
+    if not is_logged_in():
+        return redirect(url_for('login'))
+
+    form = Form.query.get(form_id)
+
+    if form is None:
+        return "Form not found."
+
+    responses = Response.query.filter_by(form_id=form.id).all()
+    questions = Question.query.filter_by(form_id=form.id).all()
+
+    return render_template('view_responses.html', form=form, responses=responses, questions=questions, get_response_text = get_response_text)
+
 
 #-------------------Delete Form-----------------------------
-
 @app.route('/delete-form/<int:form_id>', methods=['POST'])
 def delete_form(form_id):
     if not is_logged_in():
@@ -180,6 +191,9 @@ def fill_form(form_id):
 
         session.commit()
         session.close()
+
+        # after_submission_plugins(form, response)
+        # commented because of login details entered due to personal reasons
 
         return "Form submitted successfully."
 

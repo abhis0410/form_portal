@@ -1,10 +1,16 @@
+"""
+-----------------This Code is written by-----------------
+---------------------Abhinav Singla----------------------
+"""
+
+#Code Starts Here
 from twilio.rest import Client
 
-twilio_account_sid = ''
-twilio_auth_token = ''
-twilio_phone_number = ''
-
 def send_sms_notification(form, response):
+    twilio_account_sid = ''
+    twilio_auth_token = ''
+    twilio_phone_number = ''
+
     client = Client(twilio_account_sid, twilio_auth_token)
 
     customer_phone_number = response.customer_phone  # Update this with your data structure

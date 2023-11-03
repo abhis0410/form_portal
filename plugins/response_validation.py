@@ -1,3 +1,9 @@
+"""
+-----------------This Code is written by-----------------
+---------------------Abhinav Singla----------------------
+"""
+
+#Code Starts Here
 import smtplib
 from email.mime.text import MIMEText
 

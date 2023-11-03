@@ -5,6 +5,7 @@
 This project is a comprehensive solution for integrating a data collection platform with various post-submission business logic actions.  
 This README provides an overview of the design, architecture, and implementation of this solution.
 
+Note: I have not include authentication files and variable (credentials.json, smtp details, twilio details etc) due to security reasons. You must add to run the code 
 
 ## Problem Statements
 

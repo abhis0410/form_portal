@@ -21,7 +21,7 @@ def export_response(form, response):
         credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
         gc = gspread.authorize(credentials)
 
-        spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1yBsWYQm-GgmIMHC5cQf8wB5ZmkZiEZsq4sdo-_ZNCBY/edit'
+        spreadsheet_url = ''
 
         sh = gc.open_by_url(spreadsheet_url)
 

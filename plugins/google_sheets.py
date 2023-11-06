@@ -10,7 +10,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from gspread.exceptions import SpreadsheetNotFound
-from models import Answer 
+from app import Answer 
 
 def export_response(form, response):
     try:

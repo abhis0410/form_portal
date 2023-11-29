@@ -1,5 +1,3 @@
-
-# Atlan-Backend-Challenge
 ## Data Collection Platform Integration Solution
 
 This project is a comprehensive solution for integrating a data collection platform with various post-submission business logic actions.  
